@@ -138,9 +138,31 @@ const createDinoCards = (dinoCollection) => {
   printToDom('#dinoContainer', domString);
 };
 
+const createNewDino = (e) => {
+  e.preventDefault();
+
+  const newDino = {
+    id: `${Date.now()}`,
+    name: document.querySelector('#dino-name').value,
+    type: document.querySelector('#dino-type').value,
+    age: document.querySelector('#dino-age').value,
+    owner: document.querySelector('#dino-owner').value,
+    adventures: [],
+    health: 100, // biz rule
+    imageUrl: document.querySelector('#dino-image').value,
+  };
+
+  document.querySelector('#collapseOne').classList.remove('show');
+  document.querySelector('#new-dino-form').reset();
+
+  dinos.unshift(newDino);
+
+  createDinoCards(dinos);
+};
 
 const init = () => {
   createDinoCards(dinos);
+  document.querySelector('#submit-new-dino').addEventListener('click', createNewDino);
 };
 
 init();
