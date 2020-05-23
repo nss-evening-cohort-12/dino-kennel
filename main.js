@@ -95,6 +95,49 @@ const printToDom = (selector, textToPrint) => {
   document.querySelector(selector).innerHTML = textToPrint;
 }
 
+const feedThisDinoEvent = (e) => {
+  // long way
+  // array1.findIndex((element) => {
+  //   if (element > 13) {
+  //     return true;
+  //   }
+  //   return false;
+  // });
+
+  // short way
+  // array1.findIndex(element => {
+  //   return element > 13
+  // });
+
+  // shortest way
+  // array1 = [1,2,13,13,4,5]
+  // array1.findIndex(element => element > 13);
+  const dinoId = e.target.closest('.dino-card').id;
+  const dinoIndex = dinos.findIndex(currentDinoInThisLoop => {
+    if (currentDinoInThisLoop.id === dinoId) {
+      return true;
+    }
+
+    return false;
+  })
+
+  if (dinos[dinoIndex].health === 100) return;
+
+  dinos[dinoIndex].health += 10;
+
+  if (dinos[dinoIndex].health > 100) dinos[dinoIndex].health = 100;
+
+  createDinoCards(dinos);
+};
+
+const feedEvents = () => {
+  // get all feed buttons
+  const feedButtons = document.querySelectorAll('.feed-button');
+  // add a click event to each of those feed buttons
+  for (let i = 0; i < feedButtons.length; i++) {
+    feedButtons[i].addEventListener('click', feedThisDinoEvent);
+  }
+};
 
 const createDinoCards = (dinoCollection) => {
   let domString = '<div class="row row-cols-1 row-cols-md-2">';
@@ -119,7 +162,7 @@ const createDinoCards = (dinoCollection) => {
           </div>
           <div class="card-footer">
             <div class="row mb-2">
-              <button type="button" class="m-auto btn btn-outline-primary"><i class="fas fa-drumstick-bite"></i></button>
+              <button type="button" class="m-auto btn btn-outline-primary feed-button"><i class="fas fa-drumstick-bite"></i></button>
               <button type="button" class="m-auto btn btn-outline-secondary"><i class="far fa-hand-paper"></i></button>
             </div>
             <div class="row">
@@ -136,6 +179,8 @@ const createDinoCards = (dinoCollection) => {
   domString += '</div>';
 
   printToDom('#dinoContainer', domString);
+
+  feedEvents();
 };
 
 const createNewDino = (e) => {
