@@ -9,3 +9,7 @@ body {
 h1 {
   font-family: 'Roboto Slab', serif !important;
 }
+
+.delete-dino {
+  width: 44px;
+}
