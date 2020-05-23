@@ -95,15 +95,26 @@ const printToDom = (selector, textToPrint) => {
   document.querySelector(selector).innerHTML = textToPrint;
 }
 
+const findDinoIndexById = (dinoId) => {
+  return dinos.findIndex(dino => dino.id === dinoId);
+}
+
 const feedThisDinoEvent = (e) => {
   const dinoId = e.target.closest('.dino-card').id;
-  const dinoIndex = dinos.findIndex(dino => dino.id === dinoId);
+  const dinoIndex = findDinoIndexById(dinoId);
 
   if (dinos[dinoIndex].health === 100) return;
 
   dinos[dinoIndex].health += 10;
 
   if (dinos[dinoIndex].health > 100) dinos[dinoIndex].health = 100;
+
+  createDinoCards(dinos);
+};
+
+const deleteThisDino = (e) => {
+  const dinoId = e.target.closest('.dino-card').id;
+  dinos.splice(findDinoIndexById(dinoId), 1);
 
   createDinoCards(dinos);
 };
@@ -115,6 +126,18 @@ const feedEvents = () => {
   }
 };
 
+const deleteEvents = () => {
+  const deleteButtons = document.querySelectorAll('.delete-dino');
+  for (let i = 0; i < deleteButtons.length; i++) {
+    deleteButtons[i].addEventListener('click', deleteThisDino);
+  }
+};
+
+const attachEvents = () => {
+  feedEvents();
+  deleteEvents();
+};
+
 const createDinoCards = (dinoCollection) => {
   let domString = '<div class="row row-cols-1 row-cols-md-2">';
 
@@ -123,6 +146,7 @@ const createDinoCards = (dinoCollection) => {
     domString += `
       <div class="col mb-4">
         <div id="${dino.id}" class="card dino-card">
+          <button class="ml-auto btn btn-danger delete-dino"><i class="fas fa-meteor"></i></button>
           <img class="card-img-top" src="${dino.imageUrl}" alt="Picture of the ${dino.type} ${dino.name}">
           <div class="card-body">
             <div class="row">
@@ -156,7 +180,7 @@ const createDinoCards = (dinoCollection) => {
 
   printToDom('#dinoContainer', domString);
 
-  feedEvents();
+  attachEvents();
 };
 
 const createNewDino = (e) => {
