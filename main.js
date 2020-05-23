@@ -37,7 +37,7 @@ const dinos = [
     owner: 'Matt',
     adventures: [],
     health: 100,
-    imageUrl: 'https://lh3.googleusercontent.com/proxy/_rJSL88ErOEvgHl5SInWOEolOdikwIMcKWPv9iqZzt3IUkD33WdG6d9qd8TmNJFSiszTXm7JeGQPocmB_BZErKxt__25LOpW75dmnVuy0nuY0PatX2cIYA-C'
+    imageUrl: 'https://media.wired.com/photos/590a5551f5d3a93367708fcf/master/pass/165517482-featured.jpg'
   },
   {
     id: 'dino5',
@@ -91,10 +91,56 @@ const dinos = [
   }
 ];
 
-console.log('Hello there 🦖');
-
 const printToDom = (selector, textToPrint) => {
   document.querySelector(selector).innerHTML = textToPrint;
 }
 
-printToDom('#main', '<h2><i class="fas fa-cat"></i></h2>')
+
+const createDinoCards = (dinoCollection) => {
+  let domString = '<div class="row row-cols-1 row-cols-md-2">';
+
+  for (let i = 0; i < dinoCollection.length; i++) {
+    const dino = dinoCollection[i];
+    domString += `
+      <div class="col mb-4">
+        <div id="${dino.id}" class="card dino-card">
+          <img class="card-img-top" src="${dino.imageUrl}" alt="Picture of the ${dino.type} ${dino.name}">
+          <div class="card-body">
+            <div class="row">
+              <h5 class="card-title">${dino.name}</h5>
+            </div>
+            <div class="row">
+              <h6 class="">${dino.health} HP</h6>
+            </div>
+            <div class="row">
+              <h6 class="">${dino.age}</h6>
+            </div>
+            <p class="card-text">TODO: list of dinos adventures</p>
+          </div>
+          <div class="card-footer">
+            <div class="row mb-2">
+              <button type="button" class="m-auto btn btn-outline-primary"><i class="fas fa-drumstick-bite"></i></button>
+              <button type="button" class="m-auto btn btn-outline-secondary"><i class="far fa-hand-paper"></i></button>
+            </div>
+            <div class="row">
+              <button type="button" class="m-auto btn btn-outline-warning"><i class="fas fa-binoculars"></i></button>
+              <button type="button" class="m-auto btn btn-outline-danger"><i class="fas fa-globe-europe"></i></button>
+            </div>
+          </div>
+          <small class="text-muted">Last updated 3 mins ago</small>
+        </div>
+      </div>
+    `;
+  }
+
+  domString += '</div>';
+
+  printToDom('#dinoContainer', domString);
+};
+
+
+const init = () => {
+  createDinoCards(dinos);
+};
+
+init();
