@@ -91,14 +91,21 @@ const dinos = [
   }
 ];
 
+/* UTIL FUNCS */
 const printToDom = (selector, textToPrint) => {
   document.querySelector(selector).innerHTML = textToPrint;
 }
 
-const findDinoIndexById = (dinoId) => {
-  return dinos.findIndex(dino => dino.id === dinoId);
-}
+const findDinoIndexById = dinoId => dinos.findIndex(dino => dino.id === dinoId);
 
+const genericEventAttacher = (selector, functionToAttach) => {
+  const targets = document.querySelectorAll(selector);
+  for (let i = 0; i < targets.length; i++) {
+    targets[i].addEventListener('click', functionToAttach);
+  }
+};
+
+/* EVENT FUNCS */
 const feedThisDinoEvent = (e) => {
   const dinoId = e.target.closest('.dino-card').id;
   const dinoIndex = findDinoIndexById(dinoId);
@@ -112,30 +119,30 @@ const feedThisDinoEvent = (e) => {
   createDinoCards(dinos);
 };
 
-const deleteThisDino = (e) => {
+const deleteThisDinoEvent = (e) => {
   const dinoId = e.target.closest('.dino-card').id;
   dinos.splice(findDinoIndexById(dinoId), 1);
 
   createDinoCards(dinos);
 };
 
-const feedEvents = () => {
-  const feedButtons = document.querySelectorAll('.feed-button');
-  for (let i = 0; i < feedButtons.length; i++) {
-    feedButtons[i].addEventListener('click', feedThisDinoEvent);
-  }
-};
+const petThisDinoEvent = (e) => {
+  const dinoId = e.target.closest('.dino-card').id; 
+  const dinoIndex = findDinoIndexById(dinoId);
 
-const deleteEvents = () => {
-  const deleteButtons = document.querySelectorAll('.delete-dino');
-  for (let i = 0; i < deleteButtons.length; i++) {
-    deleteButtons[i].addEventListener('click', deleteThisDino);
-  }
+  if (dinos[dinoIndex].health === 100) return;
+
+  dinos[dinoIndex].health++;
+
+  if (dinos[dinoIndex].health > 100) dinos[dinoIndex].health = 100;
+
+  createDinoCards(dinos);
 };
 
 const attachEvents = () => {
-  feedEvents();
-  deleteEvents();
+  genericEventAttacher('.feed-button', feedThisDinoEvent);
+  genericEventAttacher('.delete-dino', deleteThisDinoEvent);
+  genericEventAttacher('.pet-button', petThisDinoEvent);
 };
 
 const createDinoCards = (dinoCollection) => {
@@ -163,7 +170,7 @@ const createDinoCards = (dinoCollection) => {
           <div class="card-footer">
             <div class="row mb-2">
               <button type="button" class="m-auto btn btn-outline-primary feed-button"><i class="fas fa-drumstick-bite"></i></button>
-              <button type="button" class="m-auto btn btn-outline-secondary"><i class="far fa-hand-paper"></i></button>
+              <button type="button" class="m-auto btn btn-outline-secondary pet-button"><i class="far fa-hand-paper"></i></button>
             </div>
             <div class="row">
               <button type="button" class="m-auto btn btn-outline-warning"><i class="fas fa-binoculars"></i></button>
