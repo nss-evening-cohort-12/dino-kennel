@@ -96,30 +96,8 @@ const printToDom = (selector, textToPrint) => {
 }
 
 const feedThisDinoEvent = (e) => {
-  // long way
-  // array1.findIndex((element) => {
-  //   if (element > 13) {
-  //     return true;
-  //   }
-  //   return false;
-  // });
-
-  // short way
-  // array1.findIndex(element => {
-  //   return element > 13
-  // });
-
-  // shortest way
-  // array1 = [1,2,13,13,4,5]
-  // array1.findIndex(element => element > 13);
   const dinoId = e.target.closest('.dino-card').id;
-  const dinoIndex = dinos.findIndex(currentDinoInThisLoop => {
-    if (currentDinoInThisLoop.id === dinoId) {
-      return true;
-    }
-
-    return false;
-  })
+  const dinoIndex = dinos.findIndex(dino => dino.id === dinoId);
 
   if (dinos[dinoIndex].health === 100) return;
 
@@ -131,9 +109,7 @@ const feedThisDinoEvent = (e) => {
 };
 
 const feedEvents = () => {
-  // get all feed buttons
   const feedButtons = document.querySelectorAll('.feed-button');
-  // add a click event to each of those feed buttons
   for (let i = 0; i < feedButtons.length; i++) {
     feedButtons[i].addEventListener('click', feedThisDinoEvent);
   }
